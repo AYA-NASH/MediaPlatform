@@ -3,7 +3,7 @@ import Button from "./Button";
 
 export default function LoadForm() {
     const [loadedData, setLoadedData] = useState({ imagePath: "" })
-    const setFormData = (evt) => {
+    const filePicker = (evt) => {
 
         setLoadedData(oldData => {
             return {
@@ -16,7 +16,7 @@ export default function LoadForm() {
     const sendInformation = async (evt) => {
         evt.preventDefault();
         try {
-            const response = await fetch('http://localhost:8000/feed/post', {
+            const response = await fetch('http://localhost:8000/home/post', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -41,11 +41,13 @@ export default function LoadForm() {
                 <label htmlFor="imagePath">Image Path</label>
                 <input
                     name="imagePath"
-                    type="text"
+                    type="file"
                     id="imagePath"
+                    accept=".png, .jpg, .jpeg"
                     value={loadedData.imagePath}
-                    onChange={setFormData}
+                    onChange={filePicker}
                 ></input>
+
                 <Button text={"OK"} clickHandler={sendInformation} />
             </form>
 

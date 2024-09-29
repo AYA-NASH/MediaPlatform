@@ -1,3 +1,7 @@
+backend-module/node_modules
+
+react-module/node_modules
+
 # Logs
 logs
 *.log
