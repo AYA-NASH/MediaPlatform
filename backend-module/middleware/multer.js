@@ -1,17 +1,33 @@
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
 const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './images');
+        const dir = './uploads';
+
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+        cb(null, dir);
     },
     filename: (req, file, cb) => {
-        cb(null, `image-${Date.now()}` + path.extname(file.originalname));
+        let fileName;
+        if (file.mimetype === 'video/mp4') {
+            fileName = `video-${Date.now()}` + path.extname(file.originalname);
+        }
+        else {
+            fileName = `image-${Date.now()}` + path.extname(file.originalname);
+        }
+        cb(null, fileName);
     }
 });
 
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+    if (file.mimetype === 'image/png' ||
+        file.mimetype === 'image/jpg' ||
+        file.mimetype === 'image/jpeg' ||
+        file.mimetype === "video/mp4") {
         cb(null, true);
     } else {
         cb(null, false);

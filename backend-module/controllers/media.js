@@ -6,17 +6,23 @@ exports.createPost = (req, res, next) => {
         return res.status(400).json({ message: 'No files uploaded!' });
     }
 
-    const images = req.files.map((f) => f.path);
+    const mediaPaths = req.files.map(file => file.path);
+    console.log("Uploaded media paths:", mediaPaths);
 
     const newPost = new Post({
-        imageUrls: images
+        mediaUrls: mediaPaths
     });
 
-    newPost.save().then(r => {
-        res.status(201).json({
-            message: 'Post created successfully!',
-            post: images
+    newPost.save()
+        .then(result => {
+            res.status(201).json({
+                message: 'Post created successfully!',
+                post: result
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ message: 'Saving post failed.' });
         });
-    });
 
 }

@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const postSchema = new Schema(
     {
-        imageUrls: {
+        mediaUrls: {
             type: [{ type: String }],
             required: true
         }
