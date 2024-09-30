@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const homeRoutes = require('./routes/home');
-// const multerUpload = require('./middleware/multer');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 
@@ -21,7 +21,14 @@ app.use((req, res, next) => {
 });
 
 app.use('/home', homeRoutes);
+app.use('/auth', authRoutes);
 
+app.use((error, req, res, next) => {
+    const status = error.statusCode || 500;
+    const message = error.message;
+    const errorData = error.data;
+    res.status(status).json({ message: message, data: errorData });
+})
 
 mongoose.connect(
     "mongodb+srv://ayanashaat99:H6rUIq2elSKY63gs@cluster0.u4n9mhf.mongodb.net/media-platform"
