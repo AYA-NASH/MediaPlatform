@@ -68,7 +68,6 @@ function MediaUpload() {
                     multiple
                     onChange={handleFileChange}>
                 </input>
-
                 <button type="submit">Submit</button>
             </form>
             {status && <h4>{status}</h4>}
