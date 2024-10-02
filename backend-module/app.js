@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 
 const homeRoutes = require('./routes/home');
 const authRoutes = require('./routes/auth');
+const likeRoutes = require('./routes/like');
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use((req, res, next) => {
 
 app.use('/home', homeRoutes);
 app.use('/auth', authRoutes);
+app.use('/like', likeRoutes);
 
 app.use((error, req, res, next) => {
     console.log("Error Middleware-----\n,Error: ", error);
