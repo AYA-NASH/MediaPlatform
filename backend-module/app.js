@@ -24,6 +24,7 @@ app.use('/home', homeRoutes);
 app.use('/auth', authRoutes);
 
 app.use((error, req, res, next) => {
+    console.log("Error Middleware-----\n,Error: ", error);
     const status = error.statusCode || 500;
     const message = error.message;
     const errorData = error.data;
