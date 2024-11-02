@@ -1,0 +1,87 @@
+.Post {
+    width: 90%;
+    /* Keeps the post responsive */
+    max-width: 500px;
+    /* Limit the width */
+    height: 80vh;
+    /* Adjust height to be a percentage of the viewport */
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+    margin: 15px auto;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.Post:hover {
+    transform: scale(1.01);
+}
+
+.post-data {
+    flex: 1;
+    overflow: hidden;
+}
+
+.post-data p {
+    margin: 0;
+    color: #555;
+    font-size: 0.85em;
+}
+
+.post-data h1 {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    font-size: 1.3em;
+    color: #333;
+}
+
+.post-data img {
+    width: 100%;
+    max-height: 60vh;
+    object-fit: none;
+}
+
+.Post i {
+    margin-right: 8px;
+    margin-bottom: 20px;
+    font-size: 1em;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+
+.icon-container {
+    position: relative;
+    display: inline-block;
+}
+
+.icon-container .tooltip {
+    visibility: hidden;
+    width: 80px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    bottom: 125%;
+    /* Position above the icon */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1;
+}
+
+.icon-container:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+.Post i:hover {
+    color: #007bff;
+}

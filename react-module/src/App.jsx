@@ -1,19 +1,24 @@
 // import './App.css'
-import AuthForm from './components/AuthForm.jsx';
-import Button from './components/Button.jsx';
-import LoadForm from './components/LoadForm.jsx';
-import MediaUpload from './components/MediaUpload.jsx';
-import AuthPage from './Pages/Authpage.jsx';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import Home from './Pages/Home';
+import Login from './Pages/Login';
+import CreatePost from './Pages/CreatePost';
+import Navbar from './components/navbar/Navbar';
 
 function App() {
-
   return (
-    <>
-      {/* <Button text={"Click"} clickHandler={() => { console.log("Button Clilcked!!!") }} /> */}
-      {/* <MediaUpload /> */}
-      <AuthPage />
-    </>
+    <div className="App">
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="create-post" element={<CreatePost />} />
+        </Routes>
+      </Router>
+    </div>
   )
 }
 
-export default App
+export default App;
