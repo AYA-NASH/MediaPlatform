@@ -1,0 +1,69 @@
+.Form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 400px;
+    margin: 2rem auto;
+    /* Center the form on the page */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    /* Light background */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.Form input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.Form label {
+    margin-right: 20px;
+}
+
+input[type="textarea"] {
+    height: 500px;
+}
+
+.Form input:focus {
+    border-color: #a16767;
+    /* Matches post background color */
+}
+
+.Form .submitForm {
+    background-color: #333;
+    /* Matches post background color */
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    padding: 8px;
+}
+
+.Form .submitForm:hover {
+    background-color: #292929;
+    /* Slightly darker on hover */
+}
+
+.error-message {
+    color: red;
+    font-size: 0.85em;
+    margin-top: -10px;
+}
+
+.status {
+    font-size: 0.9em;
+    color: green;
+    margin-top: 10px;
+}
+
+.error-input {
+    border-color: red;
+}

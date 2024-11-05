@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Post from "./Post";
+import Post from "./post-crud/Post";
 function Home() {
     const [postsList, setPostsList] = useState([]);
 

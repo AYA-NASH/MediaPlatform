@@ -1,0 +1,32 @@
+.preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    /* Allow wrapping to the next line */
+    gap: 10px;
+    /* Space between items */
+    padding: 10px;
+    /* Padding around the container */
+    border: 2px dashed #ccc;
+    /* Dashed border to indicate the area */
+    border-radius: 5px;
+    /* Slightly rounded corners */
+    background-color: #f9f9f9;
+    /* Light background color */
+}
+
+.preview-container img,
+.preview-container video {
+    max-width: 100%;
+    /* Ensure responsiveness */
+    height: auto;
+    /* Maintain aspect ratio */
+    border-radius: 5px;
+    /* Rounded corners for images/videos */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    /* Subtle shadow */
+}
+
+.preview-container video {
+    max-height: 200px;
+    /* Limit the height for videos */
+}
