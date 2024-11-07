@@ -1,14 +1,17 @@
+const mongoose = require('mongoose');
 const Post = require('../models/post');
 const User = require('../models/user');
 const Like = require('../models/like');
+const { Mongoose } = require('mongoose');
 
 exports.likePost = (req, res, next) => {
     const postId = req.params.postId;
+
     User.findById(req.userId)
         .then(user => {
             if (!user) {
                 const error = new Error('Login to like this Post');
-                error.statusCode(404);
+                error.statusCode = 404;
                 throw error;
             }
 
@@ -64,17 +67,19 @@ exports.getPostLikes = (req, res, next) => {
 exports.unlikePost = (req, res, next) => {
     const postId = req.params.postId;
     const userId = req.userId;
+    let users;
     Like.findOne({ postId: postId })
         .populate('users')
         .then(likedPost => {
             if (likedPost.users && likedPost.users.length > 0) {
+                users = likedPost.users;
                 likedPost.users = likedPost.users.filter(user => user._id.toString() !== userId);
                 return likedPost.save();
             }
         })
         .then(result => {
             if (result) {
-                res.status(200).json({ message: `User ${userId} unlike the Post ${postId}` });
+                res.status(200).json({ message: `User ${userId} unlike the Post ${postId}`, totalLikes: result.users.length });
             }
         })
         .catch(err => {

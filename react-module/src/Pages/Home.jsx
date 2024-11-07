@@ -5,7 +5,7 @@ function Home() {
 
     const fetchPosts = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/home`, {
+            const response = await fetch("http://localhost:8000/home", {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',

@@ -22,7 +22,7 @@ function CreatePost() {
             const response = await fetch('http://localhost:8000/home/post', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${auth}`,
+                    'Authorization': `Bearer ${auth.token}`,
                 },
                 body: formData,
             });

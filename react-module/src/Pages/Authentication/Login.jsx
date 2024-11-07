@@ -32,9 +32,9 @@ function Login({ loginUser }) {
             }
 
             const data = await response.json();
-            loginUser(data.token);
-            console.log(data.token)
-            navigate('/create-post');
+            loginUser(data);
+            console.log(data)
+            navigate('/');
 
         } catch (err) {
             console.error("Something went wrong in getting the user's token:", err);

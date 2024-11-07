@@ -1,11 +1,19 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { AppContext } from "../../App";
 import './Post.css'
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import DeletePost from "./create-post/DeletePost";
+import LikePost from "./LikePost";
 
 function PostView() {
     const { postId } = useParams();
     const [fetchedPost, setFetchedPost] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    const { auth } = useContext(AppContext);
+
+    const navigate = useNavigate();
 
     const fetchPost = async (postId) => {
         try {
@@ -33,7 +41,6 @@ function PostView() {
         }
     }, [postId]);
 
-
     if (!fetchedPost) {
         return <p>Loading post...</p>;
     }
@@ -56,6 +63,12 @@ function PostView() {
         flexBasis: "calc(33.33% - 10px)"
     };
 
+    const editPost = () => {
+        navigate(`/edit-post/${postId}`, { state: fetchedPost });
+    }
+
+    const closeDeleteModal = () => setIsDeleteModalOpen(false);
+
     return (
         <div className="Post">
             <div className="post-data">
@@ -72,10 +85,22 @@ function PostView() {
             </div>
 
             <div className="icon-container">
-                <i className="fas fa-edit"></i>
-                <i className="fas fa-thumbs-up"></i>
-                <i className="fas fa-trash"></i>
 
+                {(fetchedPost.creator === auth.userId)
+                    && <i className="fas fa-edit" onClick={editPost}></i>}
+
+                {(fetchedPost.creator === auth.userId)
+                    && <i className="fas fa-trash"
+                        onClick={() => setIsDeleteModalOpen(true)}></i>}
+
+                <i className="fas fa-thumbs-up"></i>
+
+                {isDeleteModalOpen &&
+                    <DeletePost
+                        postId={postId}
+                        onClose={closeDeleteModal}
+                    />}
+                <LikePost postId={fetchedPost._id} />
             </div>
         </div>
     );

@@ -30,7 +30,7 @@ function PostData({ postData, setPostData }) {
                 onChange={handleChange}
             />
 
-            <MediaUpload setSelectedFiles={handleFilesChange} />
+            <MediaUpload mediaUrls={postData.mediaUrls} setSelectedFiles={handleFilesChange} />
 
             <label htmlFor="content">Content</label>
             <textarea
