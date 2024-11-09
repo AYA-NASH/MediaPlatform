@@ -9,9 +9,9 @@ router.get('/', mediaController.getAllPosts);
 
 router.get('/post/:postId', mediaController.getPost);
 
-router.put('/post/:postId', isAuth, upload.array('files', 10), mediaController.editPost);
+router.put('/post/:postId', isAuth, upload.array('mediaUrls', 10), mediaController.editPost);
 
-router.post('/post', isAuth, upload.array('files', 10), mediaController.createPost);
+router.post('/post', isAuth, upload.array('mediaUrls', 10), mediaController.createPost);
 
 router.delete('/post/:postId', isAuth, mediaController.deletePost);
 

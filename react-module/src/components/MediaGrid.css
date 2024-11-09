@@ -1,0 +1,20 @@
+.MediaGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 0.5rem;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.MediaGrid img,
+.MediaGrid video {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.MediaGrid video {
+    max-height: 150px;
+}

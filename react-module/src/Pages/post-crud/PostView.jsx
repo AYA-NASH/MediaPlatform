@@ -5,6 +5,7 @@ import './Post.css'
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import DeletePost from "./create-post/DeletePost";
 import LikePost from "./LikePost";
+import MediaGrid from "../../components/MediaGrid";
 
 function PostView() {
     const { postId } = useParams();
@@ -48,23 +49,8 @@ function PostView() {
     const { title, content, mediaUrls = [], creator = {}, updatedAt } = fetchedPost;
     const { email } = creator;
 
-    const mediaGrid = {
-        display: "flex",
-        flexWrap: "wrap",
-        gap: "10px",
-        justifyContent: "center"
-    };
-
-    const mediaImage = {
-        maxWidth: "100%",
-        height: "auto",
-        objectFit: "cover",
-        borderRadius: "5px",
-        flexBasis: "calc(33.33% - 10px)"
-    };
-
     const editPost = () => {
-        navigate(`/edit-post/${postId}`, { state: fetchedPost });
+        navigate(`/edit-post/${postId}`, { state: { ...fetchedPost, mediaUrls: fetchedPost.mediaUrls || [] } });
     }
 
     const closeDeleteModal = () => setIsDeleteModalOpen(false);
@@ -76,11 +62,13 @@ function PostView() {
                 <p>{content}</p>
                 <p>By: {email}</p>
                 <p>Updated at: {updatedAt ? new Date(updatedAt).toLocaleDateString() : 'N/A'}</p>
-                <div className="media-grid" style={mediaGrid}>
-                    {mediaUrls.map((path, index) => (
-                        <img key={index} src={`http://localhost:8000/${path}`} alt={`Media ${index + 1}`} style={mediaImage} />
-                    ))}
-                </div>
+
+                <MediaGrid mediaUrls={fetchedPost.mediaUrls.map(file => {
+                    return {
+                        path: `http://localhost:8000/${file}`,
+                        type: file.match(/\.(jpg|jpeg|png)$/) ? "image" : "video"
+                    }
+                })} />
 
             </div>
 

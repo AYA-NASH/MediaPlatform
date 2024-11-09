@@ -32,7 +32,10 @@ input[type="textarea"] {
 }
 
 .Form input:focus {
-    border-color: #a16767;
+    outline: none;
+    border-color: #007bff;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
     /* Matches post background color */
 }
 

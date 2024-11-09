@@ -3,7 +3,7 @@ import { useContext, useState } from 'react';
 
 import PostData from "./create-post/PostData";
 import { AppContext } from '../../App';
-
+import './PostForm.css';
 function EditPost() {
     const location = useLocation();
     const { auth } = useContext(AppContext);
@@ -42,8 +42,9 @@ function EditPost() {
         editPost();
     }
 
+
     return (
-        <form onSubmit={handleEditPost}>
+        <form onSubmit={handleEditPost} className='EditPost'>
             <PostData postData={editData} setPostData={setEditData} />
             <button type="submit">Edit</button>
         </form>

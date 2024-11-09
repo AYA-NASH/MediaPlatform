@@ -13,7 +13,6 @@ export const AppContext = createContext();
 
 function App() {
   const [auth, setAuth] = useState("");
-  console.log("App Auth: ", auth)
   const [user, setUser] = useState(null);
 
   return (
