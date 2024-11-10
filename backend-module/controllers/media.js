@@ -1,4 +1,3 @@
-
 const Post = require('../models/post');
 
 exports.getAllPosts = (req, res, next) => {

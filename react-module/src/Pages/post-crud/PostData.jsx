@@ -1,7 +1,11 @@
-import MediaGrid from "../../../components/MediaGrid";
+import { useEffect, useState } from "react";
+import MediaGrid from "../../components/MediaGrid";
+
 function PostData({ postData, setPostData }) {
+    const [removedIdx, setRemovedIdx] = useState(null);
+
     const handleChange = (e) => {
-        setPostData(prev => ({
+        setPostData((prev) => ({
             ...prev,
             [e.target.name]: e.target.value
         }));
@@ -11,38 +15,48 @@ function PostData({ postData, setPostData }) {
         const filesArray = Array.from(e.target.files);
         setPostData((prev) => ({
             ...prev,
-            mediaUrls: filesArray
+            mediaUrls: [...prev.mediaUrls, ...filesArray]
         }));
     };
 
-    const { title, content, mediaUrls } = postData;
 
-    const mediaObjects = mediaUrls.length > 0 ? mediaUrls.map((file) => {
+    useEffect(() => {
+        if (removedIdx !== null) {
+            setPostData((prev) => {
+                const updatedMediaUrls = prev.mediaUrls.filter((_, i) => i !== removedIdx);
+                return {
+                    ...prev,
+                    mediaUrls: updatedMediaUrls
+                };
+            });
+            setRemovedIdx(null);
+        }
+    }, [removedIdx]);
+
+
+    const mediaObjects = postData.mediaUrls.length > 0 ? postData.mediaUrls.map((file) => {
         if (typeof file === "string") {
             return {
                 path: `http://localhost:8000/${file}`,
                 type: file.match(/\.(jpg|jpeg|png|gif)$/i) ? "image" : "video"
             };
-        }
-        else {
+        } else {
             const name = file.name;
             return {
                 path: URL.createObjectURL(file),
                 type: name.match(/\.(jpg|jpeg|png)$/) ? "image" : "video",
             };
         }
-
     }) : [];
 
     return (
         <div className="PostData">
-
             <label htmlFor="title">Title:</label>
             <input
                 type="text"
                 id="title"
                 name="title"
-                value={title}
+                value={postData.title}
                 onChange={handleChange}
             />
 
@@ -55,16 +69,21 @@ function PostData({ postData, setPostData }) {
                 onChange={handleFilesChange}
             />
 
-            {mediaUrls.length > 0 && <MediaGrid mediaUrls={mediaObjects} />}
+            {postData.mediaUrls.length > 0 && (
+                <MediaGrid
+                    mediaUrls={mediaObjects}
+                    removedItem={setRemovedIdx}
+                    edit={true}
+                />
+            )}
 
             <label htmlFor="content">Content:</label>
             <textarea
                 id="content"
                 name="content"
-                value={content}
+                value={postData.content}
                 onChange={handleChange}
             />
-
         </div>
     );
 }

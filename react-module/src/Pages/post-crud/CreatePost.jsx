@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import PostData from "./PostData";
 import { useNavigate } from 'react-router-dom';
-import { AppContext } from '../../../App';
+import { AppContext } from '../../App';
 import './../PostForm.css';
 
 function CreatePost() {

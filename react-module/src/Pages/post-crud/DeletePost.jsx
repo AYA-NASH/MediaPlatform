@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { AppContext } from '../../../App.jsx';
+import { AppContext } from '../../App.jsx';
 import { useNavigate } from 'react-router-dom';
 import './DeletePost.css';
 

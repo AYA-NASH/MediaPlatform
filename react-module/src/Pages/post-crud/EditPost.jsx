@@ -1,7 +1,7 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useContext, useState } from 'react';
 
-import PostData from "./create-post/PostData";
+import PostData from "./PostData";
 import { AppContext } from '../../App';
 import './PostForm.css';
 function EditPost() {
@@ -12,6 +12,7 @@ function EditPost() {
     const [editData, setEditData] = useState(post);
 
     const editPost = async () => {
+
         try {
             const response = await fetch(`http://localhost:8000/home/post/${post._id}`, {
                 method: 'PUT',
@@ -37,8 +38,6 @@ function EditPost() {
 
     const handleEditPost = (e) => {
         e.preventDefault();
-        console.log("Token:", auth);
-
         editPost();
     }
 
