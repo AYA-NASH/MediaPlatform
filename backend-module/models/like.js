@@ -6,8 +6,9 @@ const likeSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Post'
     },
-    users: {
-        type: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     }
 });
 

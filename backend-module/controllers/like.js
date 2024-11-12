@@ -1,91 +1,75 @@
-const mongoose = require('mongoose');
-const Post = require('../models/post');
 const User = require('../models/user');
 const Like = require('../models/like');
-const { Mongoose } = require('mongoose');
 
-exports.likePost = (req, res, next) => {
+exports.likePost = async (req, res, next) => {
+    // to like a post
+    // create a new likee entry with the both of userId, and postId.
     const postId = req.params.postId;
+    const userId = req.userId
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            const error = new Error("Un-Autherized operation");
+            error.statusCode = 404;
+            throw error;
+        }
 
-    User.findById(req.userId)
-        .then(user => {
-            if (!user) {
-                const error = new Error('Login to like this Post');
-                error.statusCode = 404;
-                throw error;
-            }
+        const isLikeExist = await Like.findOne({ postId: postId, userId: userId });
+        if (isLikeExist) {
+            return res.status(409).json({ message: 'User already likes this post' });
+        }
 
-            return Like.findOne({ postId: postId })
-        })
-        .then(likedPost => {
-            if (!likedPost) {
-                // Create a new like document if none exists (i.e. No likes yet)
-                likedPost = new Like({
-                    postId: postId,
-                    users: [req.userId]
-                });
-            } else {
+        const like = new Like({
+            postId: postId,
+            user: userId
+        });
 
-                likedPost.users.push(req.userId);
-            }
-
-            return likedPost.save();
-        })
-        .then(result => {
-            res.status(200).json({ message: `post: ${result.postId} is liked`, totalLikes: result.users.length });
-        })
-        .catch(err => {
-            if (!err.statusCode) {
-                err.statusCode = 500;
-            }
-            next(err);
-        })
+        const result = await like.save();
+        res.status(200).json({ message: 'post liked', result: result });
+    }
+    catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
 
 }
 
-exports.getPostLikes = (req, res, next) => {
+exports.getPostLikes = async (req, res, next) => {
     const postId = req.params.postId;
-    Like.findOne({ postId: postId })
-        .populate('users')
-        .then(likedPost => {
-            let totalLikes = 0;
-            console.log("Users: ", likedPost.users);
-            if (likedPost) {
-                totalLikes = likedPost.users.length;
-            }
+    try {
+        const likes = await Like.find({ postId: postId }).populate('user');
+        if (likes.length === 0) {
+            return res.status(200).json({ message: 'No likes on this post', likes: 0, users: [] });
+        }
 
-            res.status(200).json({ likes: totalLikes, users: likedPost.users.map(user => user.email) });
-        })
-        .catch(err => {
-            if (!err.statusCode) {
-                err.statusCode = 500;
-            }
-            next(err);
-        })
+        const users = likes.map(likeDoc => likeDoc.user ? likeDoc.user.name : null);
+
+        return res.status(200).json({ message: 'likes fetched', likes: likes.length, users: users });
+    }
+    catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
 }
 
-exports.unlikePost = (req, res, next) => {
+exports.unlikePost = async (req, res, next) => {
     const postId = req.params.postId;
     const userId = req.userId;
-    let users;
-    Like.findOne({ postId: postId })
-        .populate('users')
-        .then(likedPost => {
-            if (likedPost.users && likedPost.users.length > 0) {
-                users = likedPost.users;
-                likedPost.users = likedPost.users.filter(user => user._id.toString() !== userId);
-                return likedPost.save();
-            }
-        })
-        .then(result => {
-            if (result) {
-                res.status(200).json({ message: `User ${userId} unlike the Post ${postId}`, totalLikes: result.users.length });
-            }
-        })
-        .catch(err => {
-            if (!err.statusCode) {
-                err.statusCode = 500;
-            }
-            next(err);
-        })
+    try {
+        const likeDoc = await Like.findOneAndDelete({ postId: postId, user: userId });
+        if (!likeDoc) {
+            return res.status(404).json({ message: "Like not found" });
+        }
+        res.status(200).json({ message: "post unliked" });
+    }
+    catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
 }
