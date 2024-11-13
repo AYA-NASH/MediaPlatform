@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import PostData from "./PostData";
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../App';
-import './../PostForm.css';
+import './PostForm.css';
 
 function CreatePost() {
     const { auth } = useContext(AppContext);

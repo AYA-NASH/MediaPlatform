@@ -19,7 +19,6 @@ function PostData({ postData, setPostData }) {
         }));
     };
 
-
     useEffect(() => {
         if (removedIdx !== null) {
             setPostData((prev) => {
@@ -33,7 +32,7 @@ function PostData({ postData, setPostData }) {
         }
     }, [removedIdx]);
 
-
+    console.log("Current Media: ", postData.mediaUrls)
     const mediaObjects = postData.mediaUrls.length > 0 ? postData.mediaUrls.map((file) => {
         if (typeof file === "string") {
             return {
@@ -44,10 +43,12 @@ function PostData({ postData, setPostData }) {
             const name = file.name;
             return {
                 path: URL.createObjectURL(file),
-                type: name.match(/\.(jpg|jpeg|png)$/) ? "image" : "video",
+                type: name.match(/\.(jpg|jpeg|png|gif)$/) ? "image" : "video",
             };
         }
     }) : [];
+
+    console.log("mediaObjects : ", mediaObjects)
 
     return (
         <div className="PostData">

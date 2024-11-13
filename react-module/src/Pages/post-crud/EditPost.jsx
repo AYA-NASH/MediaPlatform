@@ -11,16 +11,34 @@ function EditPost() {
     const post = location.state;
     const [editData, setEditData] = useState(post);
 
-    const editPost = async () => {
+    const editPost = async (updatedPostData) => {
+        console.log(updatedPostData);
+        const formData = new FormData();
+        formData.append('title', updatedPostData.title);
+        formData.append('content', updatedPostData.content);
+
+        if (updatedPostData.mediaUrls && updatedPostData.mediaUrls.length > 0) {
+            updatedPostData.mediaUrls.forEach(file => {
+                formData.append('mediaUrls', file);
+            });
+        }
+
+        if (updatedPostData.paths) {
+            formData.append('paths', JSON.stringify(updatedPostData.paths));
+        }
+
+
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+        }
 
         try {
-            const response = await fetch(`http://localhost:8000/home/post/${post._id}`, {
+            const response = await fetch(`http://localhost:8000/home/post/${updatedPostData._id}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${auth.token}`,
-                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(editData),
+                body: formData,
             });
 
             if (!response.ok) {
@@ -29,17 +47,38 @@ function EditPost() {
             }
 
             const data = await response.json();
-            console.log(data);
-            navigate(`/home/post/${editData._id}`);
+            setEditData(data.post);
+
+            navigate(`/home/post/${data.post._id}`);
+
         } catch (err) {
             console.error("Error during post request:", err);
         }
-    }
+    };
 
     const handleEditPost = (e) => {
         e.preventDefault();
-        editPost();
-    }
+
+        const paths = [];
+        const newMedia = [];
+
+        editData.mediaUrls.forEach(url => {
+            if (typeof url === 'string') {
+                paths.push(url);
+            } else {
+                newMedia.push(url);
+            }
+        });
+
+
+        const updatedPostData = {
+            ...editData,
+            paths: paths,
+            mediaUrls: newMedia
+        };
+
+        editPost(updatedPostData);
+    };
 
 
     return (

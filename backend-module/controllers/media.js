@@ -45,7 +45,6 @@ exports.createPost = async (req, res, next) => {
     if (!req.files) {
         return res.status(400).json({ message: 'No files uploaded!' });
     }
-
     const mediaPaths = req.files.map(file => file.path);
 
     const { title, content } = req.body;
@@ -81,8 +80,10 @@ exports.createPost = async (req, res, next) => {
 exports.editPost = async (req, res, next) => {
     const postId = req.params.postId;
     const { title, content } = req.body;
+    const paths = req.body.paths ? JSON.parse(req.body.paths) : [];
 
-    let newMediaUrls = req.files ? req.files.map(file => file.path) : [];
+    const uploadedMedia = req.files ? req.files.map(file => file.path) : [];
+
     try {
         const post = await Post.findById(postId).populate('creator');
         if (!post) {
@@ -90,7 +91,8 @@ exports.editPost = async (req, res, next) => {
             error.statusCode = 404;
             throw error;
         }
-        if (post.creator._id.toString() !== req.userId) {
+
+        if (post.creator._id != req.userId) {
             const error = new Error('Not authorized');
             error.statusCode = 403;
             throw error;
@@ -99,14 +101,19 @@ exports.editPost = async (req, res, next) => {
         if (title) post.title = title;
         if (content) post.content = content;
 
-        if (newMediaUrls.length > 0) {
+        if (paths.length > 0) {
             const existingMedia = post.mediaUrls;
-            existingMedia.forEach(url => {
-                if (!newMediaUrls.includes(url)) {
+            existingMedia.forEach((url) => {
+                if (!paths.includes(url)) {
                     clearFile(url);
                 }
             });
-            post.mediaUrls = newMediaUrls;
+
+            post.mediaUrls = [...paths];
+        }
+
+        if (uploadedMedia.length > 0) {
+            post.mediaUrls = [...post.mediaUrls, ...uploadedMedia];
         }
 
         const result = await post.save();
@@ -156,6 +163,11 @@ exports.deletePost = async (req, res, next) => {
 }
 
 const clearFile = (filePath) => {
-    filePath = path.join(__dirname, '..', filePath);
-    fs.unlink(filePath, err => console.log(err));
-}
+    const fullPath = path.join(__dirname, '..', filePath);
+    if (fs.existsSync(fullPath)) {
+        fs.unlinkSync(fullPath);
+        console.log(`File deleted: ${fullPath}`);
+    } else {
+        console.log(`File not found: ${fullPath}`);
+    }
+};

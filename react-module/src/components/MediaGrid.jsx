@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import './MediaGrid.css';
 function MediaGrid({ mediaUrls, removedItem, edit = false }) {
     const [files, setFiles] = useState(mediaUrls);
-    console.log("Files: ", files)
+
+    useEffect(() => {
+        setFiles(mediaUrls);
+    }, [mediaUrls]);
 
     const deleteFile = (idx) => {
         removedItem(idx);
@@ -13,31 +16,34 @@ function MediaGrid({ mediaUrls, removedItem, edit = false }) {
 
     return (
         <div className="MediaGrid">
-            {files.map((urlObj, index) => {
-                return (urlObj.type === 'image') ? (
-
-                    <>
-                        <img key={index} src={urlObj.path} alt={`preview-${index}`} />
-                        {edit && <i
-                            className="cancel-icon fas fa-times"
-                            onClick={() => deleteFile(index)} // Remove file at this index
-                        ></i>}
-                    </>
+            {files.map((urlObj, index) => (
+                urlObj.type === 'image' ? (
+                    <div key={index}>
+                        <img src={urlObj.path} alt={`preview-${index}`} />
+                        {edit && (
+                            <i
+                                className="cancel-icon fas fa-times"
+                                onClick={() => deleteFile(index)}
+                            ></i>
+                        )}
+                    </div>
                 ) : (
-                    <>
-                        <video key={index} controls >
+                    <div key={index}>
+                        <video controls>
                             <source src={urlObj.path} />
                             Your browser does not support the video tag.
                         </video>
-                        {edit && <button onClick={() => deleteFile(index)}>cancel</button>}
-                    </>
-
-                );
-            })}
-
-
+                        {edit && (
+                            <i
+                                className="cancel-icon fas fa-times"
+                                onClick={() => deleteFile(index)}
+                            ></i>
+                        )}
+                    </div>
+                )
+            ))}
         </div>
-    )
+    );
 }
 
 export default MediaGrid;

@@ -1,9 +1,9 @@
 // import './App.css'
 import { BrowserRouter as Router, Routes, Route, useActionData } from 'react-router-dom';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import Home from './Pages/Home';
 import Login from './Pages/Authentication/Login';
-import CreatePost from './Pages/post-crud/create-post/CreatePost';
+import CreatePost from './Pages/post-crud/CreatePost';
 import EditPost from './Pages/post-crud/EditPost';
 import Navbar from './components/navbar/Navbar';
 import PostView from './Pages/post-crud/PostView';
@@ -12,8 +12,12 @@ import SignUp from './Pages/Authentication/Signup';
 export const AppContext = createContext();
 
 function App() {
-  const [auth, setAuth] = useState("");
-  const [user, setUser] = useState(null);
+  const savedAuth = JSON.parse(localStorage.getItem('auth')) || "";
+  const [auth, setAuth] = useState(savedAuth);
+
+  useEffect(() => {
+    localStorage.setItem('auth', JSON.stringify(auth));
+  }, [auth]);
 
   return (
     <div className="App">
