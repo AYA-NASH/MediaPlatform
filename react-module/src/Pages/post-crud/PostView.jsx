@@ -1,11 +1,11 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AppContext } from "../../App";
-import './Post.css'
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import DeletePost from "./DeletePost";
 import LikePost from "./LikePost";
 import MediaGrid from "../../components/MediaGrid";
+import './Post.css'
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function PostView() {
     const { postId } = useParams();
@@ -63,31 +63,24 @@ function PostView() {
                 <p>By: {email}</p>
                 <p>Updated at: {updatedAt ? new Date(updatedAt).toLocaleDateString() : 'N/A'}</p>
 
-                <MediaGrid mediaUrls={fetchedPost.mediaUrls.map(file => {
-                    return {
-                        path: `http://localhost:8000/${file}`,
-                        type: file.match(/\.(jpg|jpeg|png)$/) ? "image" : "video"
-                    }
-                })} />
+                <MediaGrid mediaUrls={fetchedPost.mediaUrls} />
 
             </div>
 
             <div className="icon-container">
-
-                {(fetchedPost.creator === auth.userId)
-                    && <i className="fas fa-edit" onClick={editPost}></i>}
-
                 {(fetchedPost.creator === auth.userId)
                     && <i className="fas fa-trash"
                         onClick={() => setIsDeleteModalOpen(true)}></i>}
 
-                <i className="fas fa-thumbs-up"></i>
+                {(fetchedPost.creator === auth.userId)
+                    && <i className="fas fa-edit" onClick={editPost}></i>}
 
                 {isDeleteModalOpen &&
                     <DeletePost
                         postId={postId}
                         onClose={closeDeleteModal}
                     />}
+
                 <LikePost postId={fetchedPost._id} />
             </div>
         </div>

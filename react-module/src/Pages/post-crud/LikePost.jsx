@@ -55,7 +55,7 @@ function LikePost({ userId, postId }) {
     };
 
     return (
-        <div>
+        <div class="LikePost">
             <i
                 className="fas fa-thumbs-up"
                 onClick={handleLikeToggle}

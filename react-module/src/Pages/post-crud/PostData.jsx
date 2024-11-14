@@ -32,24 +32,6 @@ function PostData({ postData, setPostData }) {
         }
     }, [removedIdx]);
 
-    console.log("Current Media: ", postData.mediaUrls)
-    const mediaObjects = postData.mediaUrls.length > 0 ? postData.mediaUrls.map((file) => {
-        if (typeof file === "string") {
-            return {
-                path: `http://localhost:8000/${file}`,
-                type: file.match(/\.(jpg|jpeg|png|gif)$/i) ? "image" : "video"
-            };
-        } else {
-            const name = file.name;
-            return {
-                path: URL.createObjectURL(file),
-                type: name.match(/\.(jpg|jpeg|png|gif)$/) ? "image" : "video",
-            };
-        }
-    }) : [];
-
-    console.log("mediaObjects : ", mediaObjects)
-
     return (
         <div className="PostData">
             <label htmlFor="title">Title:</label>
@@ -70,13 +52,12 @@ function PostData({ postData, setPostData }) {
                 onChange={handleFilesChange}
             />
 
-            {postData.mediaUrls.length > 0 && (
-                <MediaGrid
-                    mediaUrls={mediaObjects}
-                    removedItem={setRemovedIdx}
-                    edit={true}
-                />
-            )}
+            <MediaGrid
+                mediaUrls={postData.mediaUrls}
+                removedItem={setRemovedIdx}
+                edit={true}
+            />
+
 
             <label htmlFor="content">Content:</label>
             <textarea

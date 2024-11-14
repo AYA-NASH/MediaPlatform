@@ -1,13 +1,32 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import './MediaGrid.css';
-function MediaGrid({ mediaUrls, removedItem, edit = false }) {
-    const [files, setFiles] = useState(mediaUrls);
 
-    useEffect(() => {
-        setFiles(mediaUrls);
+function MediaGrid({ mediaUrls, removedItem, edit = false }) {
+
+    const mediaObjects = useMemo(() => {
+        return mediaUrls.length > 0 ? mediaUrls.map((file) => {
+            if (typeof file === "string") {
+                return {
+                    path: `http://localhost:8000/${file}`,
+                    type: file.match(/\.(jpg|jpeg|png|gif)$/i) ? "image" : "video"
+                };
+            } else {
+                const name = file.name;
+                return {
+                    path: URL.createObjectURL(file),
+                    type: name.match(/\.(jpg|jpeg|png|gif)$/) ? "image" : "video",
+                };
+            }
+        }) : [];
     }, [mediaUrls]);
+
+    const [files, setFiles] = useState(mediaObjects);
+
+    // useEffect(() => {
+    //     setFiles(mediaUrls);
+    // }, [mediaUrls]);
 
     const deleteFile = (idx) => {
         removedItem(idx);

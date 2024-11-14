@@ -33,7 +33,6 @@ function CreatePost() {
             }
 
             const data = await response.json();
-            console.log(data);
             navigate('/');
         } catch (err) {
             console.error("Error during post request:", err);
