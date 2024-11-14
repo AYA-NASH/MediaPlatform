@@ -1,11 +1,11 @@
 import { useEffect, useState, useContext } from "react";
 import { AppContext } from "../../App";
 
-function LikePost({ userId, postId }) {
+function LikePost({ postId }) {
     const [isLiked, setIsLiked] = useState(false);
     const [likesAmount, setLikesAmount] = useState(0);
     const { auth } = useContext(AppContext);
-
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
         getPostLikes();
@@ -25,37 +25,43 @@ function LikePost({ userId, postId }) {
         const data = await response.json();
         setLikesAmount(data.likes);
 
-        // Check if the current user is in the list of users who liked this post
-        setIsLiked(data.users.includes(userId));
+        setUsers(data.users);
     }
 
 
     const handleLikeToggle = async () => {
-        const method = isLiked ? 'DELETE' : 'POST';
+        if (auth) {
+            setIsLiked(data.users.includes(auth.userId));
+            const method = isLiked ? 'DELETE' : 'POST';
 
-        try {
-            const response = await fetch(`http://localhost:8000/like/${postId}`, {
-                method: method,
-                headers: {
-                    'Authorization': `Bearer ${auth.token}`,
-                },
-            });
+            try {
+                const response = await fetch(`http://localhost:8000/like/${postId}`, {
+                    method: method,
+                    headers: {
+                        'Authorization': `Bearer ${auth.token}`,
+                    },
+                });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Like/unlike request failed: ${response.status} ${errorData.message}`);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Like/unlike request failed: ${response.status} ${errorData.message}`);
+                }
+
+                const data = await response.json();
+                setLikesAmount(data.totalLikes);
+                setIsLiked(!isLiked);
+            } catch (error) {
+                console.error("Error in like/unlike request:", error);
             }
-
-            const data = await response.json();
-            setLikesAmount(data.totalLikes);
-            setIsLiked(!isLiked);
-        } catch (error) {
-            console.error("Error in like/unlike request:", error);
         }
+        else {
+            console.log("only users able to like")
+        }
+
     };
 
     return (
-        <div class="LikePost">
+        <div className="LikePost">
             <i
                 className="fas fa-thumbs-up"
                 onClick={handleLikeToggle}

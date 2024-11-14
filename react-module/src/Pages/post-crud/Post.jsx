@@ -50,7 +50,7 @@ function Post({ postData }) {
             </div>
 
             <div className="icon-container">
-                <LikePost userId={auth.userId} postId={postData._id} />
+                <LikePost postId={postData._id} />
 
                 <i className="fas fa-expand"
                     onClick={() => viewPost(postData._id)}></i>
