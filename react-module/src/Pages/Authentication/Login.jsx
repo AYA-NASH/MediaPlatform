@@ -3,6 +3,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import Message from "../../components/messages/Message";
 import './Form.css';
 
 
@@ -11,6 +12,7 @@ function Login({ loginUser }) {
     const location = useLocation();
     const [showMessage, setShowMessage] = useState(false);
     const [message, setMessage] = useState('');
+    const [serverMessage, setServerMessage] = useState('');
 
     useEffect(() => {
         if (location.state && location.state.message) {
@@ -49,11 +51,16 @@ function Login({ loginUser }) {
                 body: JSON.stringify(formData)
             });
 
-            if (!response.ok) {
-                throw new Error("Login Failed");
-            }
-
             const data = await response.json();
+
+            if (response.status === 401) {
+                setServerMessage(data.message || "An error occurred during login.");
+                return;
+            }
+            if (response.status === 500) {
+                setServerMessage(data.message || "Something wnt wrong, please try again");
+                return;
+            }
 
             loginUser(data);
             navigate('/', { state: { message: `Welcome ${data.username}` } });
@@ -63,7 +70,7 @@ function Login({ loginUser }) {
         }
     };
 
-    const SignupSubmit = (data) => {
+    const LoginSubmit = (data) => {
         getAuth(data);
     };
 
@@ -76,7 +83,7 @@ function Login({ loginUser }) {
                 </div>
             )}
 
-            <form className="Form" onSubmit={handleSubmit(SignupSubmit)}>
+            <form className="Form" onSubmit={handleSubmit(LoginSubmit)}>
                 <p>Don't have an account! <a href="/signup">SignUp</a> </p>
 
                 <input placeholder="email" {...register("email")} />
@@ -86,7 +93,10 @@ function Login({ loginUser }) {
                 {errors.password && <p className="error">{errors.password?.message}</p>}
 
                 <input type="submit" className="submitForm" />
+                {serverMessage && <Message text={serverMessage} styleClass={'error'} />}
             </form>
+
+
         </div>
     )
 }

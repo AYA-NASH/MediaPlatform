@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import MediaGrid from "../../components/MediaGrid";
+import MediaGrid from "../../components/media-control/MediaGrid";
 
 function PostData({ postData, setPostData, errors }) {
     const [removedIdx, setRemovedIdx] = useState(null);

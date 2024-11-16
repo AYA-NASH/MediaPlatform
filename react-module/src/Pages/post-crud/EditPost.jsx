@@ -15,7 +15,6 @@ function EditPost() {
 
 
     const editPost = async (updatedPostData) => {
-        console.log(updatedPostData);
         const formData = new FormData();
         formData.append('title', updatedPostData.title);
         formData.append('content', updatedPostData.content);
@@ -28,11 +27,6 @@ function EditPost() {
 
         if (updatedPostData.paths) {
             formData.append('paths', JSON.stringify(updatedPostData.paths));
-        }
-
-
-        for (var pair of formData.entries()) {
-            console.log(pair[0] + ', ' + pair[1]);
         }
 
         try {
@@ -80,11 +74,6 @@ function EditPost() {
             mediaUrls: newMedia
         };
 
-        console.log("Validation input:", {
-            paths: updatedPostData.paths,
-            mediaUrls: updatedPostData.mediaUrls,
-        });
-
         const newErrors = {};
 
         const titleError = validateTitle(updatedPostData.title);
@@ -96,12 +85,10 @@ function EditPost() {
         if (titleError) newErrors.title = titleError;
         if (mediaErrors) newErrors.mediaUrls = mediaErrors;
 
-        console.log("newErrors: ", newErrors)
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             return;
         }
-        console.log("Validations Checs all passed!")
         editPost(updatedPostData);
     };
 

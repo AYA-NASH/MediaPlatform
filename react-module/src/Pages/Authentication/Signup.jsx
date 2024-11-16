@@ -2,10 +2,14 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
+import Message from "../../components/messages/Message";
 import './Form.css';
+import { useState } from "react";
 
 function SignUp() {
     const navigate = useNavigate();
+    const [serverMessage, setServerMessage] = useState('');
+
     const formSchema = yup.object().shape({
         name: yup.string()
             .required("You must add your name.")
@@ -37,10 +41,11 @@ function SignUp() {
             });
 
             if (!response.ok) {
-                throw new Error("Login Failed");
+                setServerMessage("Something wnt wrong, please try again");
+                throw new Error("SignUp Failed", "Error Messge: ", data.message);
             }
 
-            const data = await response.json(); // {meessage: "User Added", userId: ""}
+            const data = await response.json();
 
             navigate('/login', { state: { message: `Great!, now Login with your accout` } });
 
@@ -65,6 +70,7 @@ function SignUp() {
             {errors.confirmedPassword && <p className="error">{errors.confirmedPassword?.message}</p>}
 
             <input type="submit" className="submitForm" />
+            {serverMessage && <Message text={serverMessage} styleClass={'error'} />}
         </form>
     )
 }

@@ -8,7 +8,7 @@ exports.likePost = async (req, res, next) => {
         const user = await User.findById(userId);
         if (!user) {
             const error = new Error("Un-Autherized operation");
-            error.statusCode = 404;
+            error.statusCode = 403;
             throw error;
         }
 

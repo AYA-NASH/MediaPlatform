@@ -57,6 +57,7 @@ input[type="textarea"] {
 
 .error {
     color: #D8000C;
+    max-width: 400px;
     background-color: #FFBABA;
     border: 1px solid #D8000C;
     padding: 10px;
@@ -72,7 +73,8 @@ input[type="textarea"] {
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #61c965;
+    background-color: #9ce49f;
+    border: 1px solid #31b93a;
     color: white;
     padding: 10px 20px;
     border-radius: 5px;

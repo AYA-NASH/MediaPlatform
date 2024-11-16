@@ -4,7 +4,6 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import './MediaGrid.css';
 
 function MediaGrid({ mediaUrls, removedItem, edit = false }) {
-    // console.log("mediaUrls: ", mediaUrls)
     const mediaObjects = useMemo(() => {
         return mediaUrls.length > 0 ? mediaUrls.map((file) => {
             if (typeof file === "string") {
@@ -32,7 +31,6 @@ function MediaGrid({ mediaUrls, removedItem, edit = false }) {
         removedItem(idx);
         setFiles(prevFiles => prevFiles.filter((_, i) => i !== idx));
     };
-    // console.log("Files: ", files)
     return (
         <div className="MediaGrid">
             {files.map((urlObj, index) => (

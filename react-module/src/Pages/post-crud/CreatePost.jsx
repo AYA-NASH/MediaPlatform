@@ -3,6 +3,7 @@ import PostData from "./PostData";
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../App';
 import { validateTitle, validateMedia } from './post-validations';
+import Message from "../../components/messages/Message";
 import './PostForm.css';
 
 function CreatePost() {
@@ -10,6 +11,7 @@ function CreatePost() {
     const navigate = useNavigate();
     const [postData, setPostData] = useState({ title: "", content: "", mediaUrls: [] });
     const [errors, setErrors] = useState({ titleErrors: [], contentErrors: [], mediaErrors: [] });
+    const [serverMessage, setServerMessage] = useState('');
 
     const postRequest = async (postData) => {
         const formData = new FormData();
@@ -29,12 +31,13 @@ function CreatePost() {
                 body: formData,
             });
 
+            const data = await response.json();
+
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Post request failed: ${response.status} ${errorData.message}`);
+                setServerMessage("Something wnt wrong, please try again");
+                throw new Error("SignUp Failed", "Error Messge: ", data.message);
             }
 
-            const data = await response.json();
             navigate('/');
         } catch (err) {
             console.error("Error during post request:", err);
@@ -64,6 +67,7 @@ function CreatePost() {
             <form onSubmit={handlePostSubmit}>
                 <PostData postData={postData} setPostData={setPostData} errors={errors} />
                 <button type="submit">Create Post</button>
+                {serverMessage && <Message text={serverMessage} styleClass={'error'} />}
             </form>
         </div>
     );

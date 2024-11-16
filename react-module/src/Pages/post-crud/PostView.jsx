@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AppContext } from "../../App";
 import DeletePost from "./DeletePost";
 import LikePost from "./LikePost";
-import MediaGrid from "../../components/MediaGrid";
+import MediaGrid from "../../components/media-control/MediaGrid";
 import './Post.css'
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
@@ -45,7 +45,6 @@ function PostView() {
     if (!fetchedPost) {
         return <p>Loading post...</p>;
     }
-    console.log("Fetched Post: ", fetchedPost)
     const { title, content, mediaUrls = [], creator = {}, updatedAt } = fetchedPost;
     const { email } = creator;
 
