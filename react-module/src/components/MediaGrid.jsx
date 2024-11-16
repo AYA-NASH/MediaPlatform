@@ -4,19 +4,19 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import './MediaGrid.css';
 
 function MediaGrid({ mediaUrls, removedItem, edit = false }) {
-
+    // console.log("mediaUrls: ", mediaUrls)
     const mediaObjects = useMemo(() => {
         return mediaUrls.length > 0 ? mediaUrls.map((file) => {
             if (typeof file === "string") {
                 return {
                     path: `http://localhost:8000/${file}`,
-                    type: file.match(/\.(jpg|jpeg|png|gif)$/i) ? "image" : "video"
+                    type: file.match(/\.(jpg|jpeg|png)$/i) ? "image" : "video"
                 };
             } else {
                 const name = file.name;
                 return {
                     path: URL.createObjectURL(file),
-                    type: name.match(/\.(jpg|jpeg|png|gif)$/) ? "image" : "video",
+                    type: name.match(/\.(jpg|jpeg|png)$/) ? "image" : "video",
                 };
             }
         }) : [];
@@ -24,15 +24,15 @@ function MediaGrid({ mediaUrls, removedItem, edit = false }) {
 
     const [files, setFiles] = useState(mediaObjects);
 
-    // useEffect(() => {
-    //     setFiles(mediaUrls);
-    // }, [mediaUrls]);
+    useEffect(() => {
+        setFiles(mediaObjects);
+    }, [mediaObjects]);
 
     const deleteFile = (idx) => {
         removedItem(idx);
         setFiles(prevFiles => prevFiles.filter((_, i) => i !== idx));
     };
-
+    // console.log("Files: ", files)
     return (
         <div className="MediaGrid">
             {files.map((urlObj, index) => (

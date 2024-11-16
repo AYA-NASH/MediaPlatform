@@ -58,7 +58,7 @@ exports.login = async (req, res, next) => {
             'mySecretToken',
             { expiresIn: '1h' });
 
-        res.status(200).json({ token: token, userId: loadedUser._id.toString() });
+        res.status(200).json({ token: token, userId: loadedUser._id.toString(), username: loadedUser.name });
     }
 
     catch (err) {

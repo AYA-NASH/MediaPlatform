@@ -11,7 +11,10 @@ router.put('/signup', [
     body('name')
         .trim()
         .not()
-        .isEmpty(),
+        .isEmpty()
+        .withMessage('Name is required.')
+        .isLength({ min: 3, max: 50 })
+        .withMessage('Name must be between 3 and 50 characters long.'),
     body('email')
         .isEmail()
         .withMessage('please enter a valid email address')

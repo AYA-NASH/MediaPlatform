@@ -63,3 +63,20 @@ button:hover {
     background-color: #272525;
     ;
 }
+
+.error {
+    color: #D8000C;
+    background-color: #FFBABA;
+    border: 1px solid #D8000C;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.placeholder {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: -3px;
+}

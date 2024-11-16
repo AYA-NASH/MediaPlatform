@@ -2,8 +2,6 @@ const User = require('../models/user');
 const Like = require('../models/like');
 
 exports.likePost = async (req, res, next) => {
-    // to like a post
-    // create a new likee entry with the both of userId, and postId.
     const postId = req.params.postId;
     const userId = req.userId
     try {

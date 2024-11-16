@@ -55,18 +55,30 @@ input[type="textarea"] {
     /* Slightly darker on hover */
 }
 
-.error-message {
-    color: red;
-    font-size: 0.85em;
-    margin-top: -10px;
-}
-
-.status {
-    font-size: 0.9em;
-    color: green;
+.error {
+    color: #D8000C;
+    background-color: #FFBABA;
+    border: 1px solid #D8000C;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
     margin-top: 10px;
+    text-align: center;
 }
 
-.error-input {
-    border-color: red;
+.notification {
+    position: fixed;
+    width: 20%;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #61c965;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    font-weight: bold;
+    text-align: center;
+
 }

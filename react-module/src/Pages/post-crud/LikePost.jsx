@@ -4,12 +4,13 @@ import { AppContext } from "../../App";
 function LikePost({ postId }) {
     const [isLiked, setIsLiked] = useState(false);
     const [likesAmount, setLikesAmount] = useState(0);
-    const { auth } = useContext(AppContext);
     const [users, setUsers] = useState([]);
+
+    const { auth } = useContext(AppContext);
 
     useEffect(() => {
         getPostLikes();
-    }, []);
+    }, [likesAmount]);
 
 
     const getPostLikes = async () => {
@@ -31,7 +32,7 @@ function LikePost({ postId }) {
 
     const handleLikeToggle = async () => {
         if (auth) {
-            setIsLiked(data.users.includes(auth.userId));
+            setIsLiked(users.includes(auth.userId));
             const method = isLiked ? 'DELETE' : 'POST';
 
             try {
@@ -48,7 +49,10 @@ function LikePost({ postId }) {
                 }
 
                 const data = await response.json();
-                setLikesAmount(data.totalLikes);
+                setLikesAmount(likes => {
+                    if (data.userId) return likes++;
+                    likes--;
+                });
                 setIsLiked(!isLiked);
             } catch (error) {
                 console.error("Error in like/unlike request:", error);

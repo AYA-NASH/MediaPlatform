@@ -7,10 +7,20 @@ import './Form.css';
 function SignUp() {
     const navigate = useNavigate();
     const formSchema = yup.object().shape({
-        username: yup.string().required("You must add your name."),
-        email: yup.string().required("Youd must add you email address"),
-        password: yup.string().required("You must add a password."),
-        confirmedPassword: yup.string().required("Passwords didn't match"),
+        name: yup.string()
+            .required("You must add your name.")
+            .min(3, "Username must be at least 3 characters long."),
+        email: yup.string().
+            required("Youd must add you email address").
+            email("Invalid email format"),
+        password: yup.string()
+            .required("Enter your password.").min(5, "Password must be at least 5 characters long.")
+            .max(20, "Password must not exceed 20 characters.")
+            .matches(/^\S*$/, "Password cannot contain spaces."),
+        confirmedPassword: yup.string()
+            .required("Confirm Your Password")
+            .oneOf([yup.ref('password'), null], "Passwords don't match."),
+
     });
 
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -32,7 +42,7 @@ function SignUp() {
 
             const data = await response.json(); // {meessage: "User Added", userId: ""}
 
-            navigate('/login');
+            navigate('/login', { state: { message: `Great!, now Login with your accout` } });
 
         } catch (err) {
             console.error("Something went wrong", err);
@@ -41,10 +51,19 @@ function SignUp() {
 
     return (
         <form className="Form" onSubmit={handleSubmit(SignupSubmit)}>
-            <input placeholder="username" {...register("username")} />
+            <input placeholder="name" {...register("name")} />
+            {errors.name && <p className="error">{errors.name?.message}</p>}
+
+
             <input placeholder="email" {...register("email")} />
-            <input placeholder="password" {...register("password")} />
-            <input placeholder="confirmedPassword" {...register("confirmedPassword")} />
+            {errors.email && <p className="error">{errors.email?.message}</p>}
+
+            <input type="password" placeholder="password" {...register("password")} />
+            {errors.password && <p className="error">{errors.password?.message}</p>}
+
+            <input type="password" placeholder="confirmedPassword" {...register("confirmedPassword")} />
+            {errors.confirmedPassword && <p className="error">{errors.confirmedPassword?.message}</p>}
+
             <input type="submit" className="submitForm" />
         </form>
     )

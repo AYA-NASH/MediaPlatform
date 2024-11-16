@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import MediaGrid from "../../components/MediaGrid";
 
-function PostData({ postData, setPostData }) {
+function PostData({ postData, setPostData, errors }) {
     const [removedIdx, setRemovedIdx] = useState(null);
 
     const handleChange = (e) => {
@@ -42,6 +42,7 @@ function PostData({ postData, setPostData }) {
                 value={postData.title}
                 onChange={handleChange}
             />
+            {errors?.title && <p className="error">{errors.title}</p>}
 
             <label htmlFor="files">Media:</label>
             <input
@@ -49,15 +50,18 @@ function PostData({ postData, setPostData }) {
                 id="files"
                 multiple
                 name="files"
+                accept="image/png, image/jpeg, image/jpg, video/mp4"
                 onChange={handleFilesChange}
             />
-
             <MediaGrid
                 mediaUrls={postData.mediaUrls}
                 removedItem={setRemovedIdx}
                 edit={true}
             />
-
+            {errors?.mediaUrls && <p className="error">{errors.mediaUrls}</p>}
+            <p className="placeholder">
+                Supported files: .jpg, .png, .jpeg, .mp4
+            </p>
 
             <label htmlFor="content">Content:</label>
             <textarea
@@ -66,6 +70,8 @@ function PostData({ postData, setPostData }) {
                 value={postData.content}
                 onChange={handleChange}
             />
+
+
         </div>
     );
 }

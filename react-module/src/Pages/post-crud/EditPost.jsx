@@ -3,6 +3,7 @@ import { useContext, useState } from 'react';
 
 import PostData from "./PostData";
 import { AppContext } from '../../App';
+import { validateTitle, validateMedia } from './post-validations';
 import './PostForm.css';
 function EditPost() {
     const location = useLocation();
@@ -10,6 +11,8 @@ function EditPost() {
     const navigate = useNavigate();
     const post = location.state;
     const [editData, setEditData] = useState(post);
+    const [errors, setErrors] = useState({ titleErrors: [], contentErrors: [], mediaErrors: [] });
+
 
     const editPost = async (updatedPostData) => {
         console.log(updatedPostData);
@@ -77,13 +80,35 @@ function EditPost() {
             mediaUrls: newMedia
         };
 
+        console.log("Validation input:", {
+            paths: updatedPostData.paths,
+            mediaUrls: updatedPostData.mediaUrls,
+        });
+
+        const newErrors = {};
+
+        const titleError = validateTitle(updatedPostData.title);
+        const mediaErrors = validateMedia(
+            { paths: updatedPostData.paths, mediaUrls: updatedPostData.mediaUrls },
+            true
+        );
+
+        if (titleError) newErrors.title = titleError;
+        if (mediaErrors) newErrors.mediaUrls = mediaErrors;
+
+        console.log("newErrors: ", newErrors)
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
+        console.log("Validations Checs all passed!")
         editPost(updatedPostData);
     };
 
 
     return (
         <form onSubmit={handleEditPost} className='EditPost'>
-            <PostData postData={editData} setPostData={setEditData} />
+            <PostData postData={editData} setPostData={setEditData} errors={errors} />
             <button type="submit">Edit</button>
         </form>
 
