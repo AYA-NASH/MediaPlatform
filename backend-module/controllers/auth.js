@@ -1,7 +1,10 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
+const path = require('path')
 const { validationResult } = require('express-validator');
 const User = require('../models/user');
+const Like = require('../models/like');
 
 exports.signup = async (req, res, next) => {
     const errors = validationResult(req);
@@ -69,41 +72,78 @@ exports.login = async (req, res, next) => {
     }
 };
 
-exports.getUserStatus = async (req, res, next) => {
+exports.getUserProfile = async (req, res, next) => {
+    const userId = req.userId;
     try {
-        const user = await User.findById(req.userId);
+        const user = await User.findById(userId).populate('posts', 'title createdAt');
         if (!user) {
             const error = new Error('User not found.');
             error.statusCode = 404;
             throw error;
         }
-        res.status(200).json({ status: user.status });
+        const { name, email, profilePicture, status, posts, createdAt } = user;
+
+        const likedPosts = await Like.find({ user: userId })
+            .populate('postId', 'title')
+            .populate('user', 'name');
+
+        res.status(200).json({
+            profile: {
+                name,
+                email,
+                profilePicture,
+                status,
+                posts,
+                createdAt,
+                likedPosts
+            }
+
+        });
     } catch (err) {
         if (!err.statusCode) {
             err.statusCode = 500;
         }
         next(err);
     }
-};
+}
 
-exports.updateUserStatus = async (req, res, next) => {
-    const userStatus = req.body.status;
+exports.updateUserProfile = async (req, res, next) => {
+    const userId = req.userId;
     try {
-        const user = await User.findById(req.userId);
-        if (!user) {
-            const error = new Error('User not found.');
-            error.statusCode = 404;
-            throw error;
-        }
+        const user = await User.findById(userId);
 
-        user.status = newStatus;
-        await user.save();
-        res.status(200).json({ message: 'User updated.' });
+        const { name, email, status } = req.body;
+        const existingUser = await User.find({
+            email: email,
+            _id: { $ne: userId }
+        });
+        console.log('existingUser: ', existingUser)
+        if (existingUser.length > 0) {
+            return res.status(401).json({ message: "There is a user with this email" });
+        }
+        if (name) user.name = name;
+        if (email) user.email = email;
+        if (status) user.status = status;
+
+        if (req.file) {
+            if (user.profilePicture) {
+                clearFile(user.profilePicture)
+            }
+            user.profilePicture = req.file.path;
+        }
+        const result = await user.save();
+        res.status(200).json({ messgae: "User's profile updated", result: result })
     }
     catch (err) {
-        if (!err.statusCode) {
-            err.statusCode = 500;
-        }
-        next(err);
+
     }
 };
+
+const clearFile = (filePath) => {
+    const fullPath = path.join(__dirname, '..', filePath);
+    if (fs.existsSync(fullPath)) {
+        fs.unlinkSync(fullPath);
+    } else {
+        console.log(`File not found: ${fullPath}`);
+    }
+}

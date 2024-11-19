@@ -8,9 +8,13 @@
     position: relative;
 }
 
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
 .Navbar a {
     font-size: 1.5rem;
-    margin: 0 1rem;
     color: #fff;
     text-decoration: none;
     position: relative;
@@ -23,5 +27,47 @@
     background-color: #444;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     transform: translateY(-3px);
+}
 
+.user-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.navbar-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.navbar-profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.navbar-profile img:hover {
+    transform: scale(1.1);
+}
+
+.navbar-profile p {
+    font-size: 1rem;
+    margin: 0;
+    color: #fff;
+}
+
+.navbar-profile .logout {
+    font-size: 1.2rem;
+    color: #fff;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.navbar-profile .logout:hover {
+    color: #ff6b6b;
 }

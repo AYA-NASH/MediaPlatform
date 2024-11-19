@@ -3,13 +3,15 @@ import { AppContext } from '../../App';
 import { useNavigate } from "react-router-dom";
 
 
-function Logout({ setAuth }) {
+function Logout({ setAuth, setProfile }) {
     const { auth } = useContext(AppContext);
     const navigate = useNavigate();
     useEffect(() => {
         localStorage.removeItem('auth')
-        const emptyAuth = { toke: '', userId: '' }
-        setAuth(null)
+        localStorage.removeItem('profile')
+        console.log("Auth removed")
+        setAuth("")
+        setProfile({})
         navigate('/')
     }, [])
     return <h1>Logout</h1>

@@ -1,0 +1,117 @@
+.Profile {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    /* Added to position child elements absolutely */
+}
+
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 10px;
+}
+
+.profile-header h2 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.status {
+    margin: 0;
+    font-size: 14px;
+    font-style: italic;
+    color: #777;
+}
+
+.profile-info {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.profile-info .edit-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 1.1em;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.profile-info h3 {
+    margin-bottom: 10px;
+}
+
+.profile-section {
+    margin-bottom: 20px;
+}
+
+.toggle-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #3f3d3d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-btn:hover {
+    background-color: #1f1d1d;
+}
+
+.post-list {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.post-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.post-item:last-child {
+    border-bottom: none;
+}
+
+.post-item strong {
+    font-size: 16px;
+}
+
+.post-item span {
+    color: #555;
+    margin-left: 5px;
+    font-size: 14px;
+}

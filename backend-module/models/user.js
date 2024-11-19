@@ -21,7 +21,11 @@ const userSchema = new Schema({
     posts: [{
         type: Schema.Types.ObjectId,
         ref: 'Post'
-    }]
-});
+    }],
+    profilePicture: {
+        type: String
+
+    },
+}, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);
