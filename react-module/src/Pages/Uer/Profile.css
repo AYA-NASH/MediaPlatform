@@ -87,31 +87,3 @@
 .toggle-btn:hover {
     background-color: #1f1d1d;
 }
-
-.post-list {
-    margin-top: 15px;
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.post-item {
-    margin-bottom: 10px;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-.post-item:last-child {
-    border-bottom: none;
-}
-
-.post-item strong {
-    font-size: 16px;
-}
-
-.post-item span {
-    color: #555;
-    margin-left: 5px;
-    font-size: 14px;
-}

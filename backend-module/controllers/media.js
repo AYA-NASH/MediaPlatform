@@ -1,5 +1,6 @@
 const Post = require('../models/post');
 const User = require('../models/user');
+const Like = require('../models/like');
 
 const fs = require('fs');
 const path = require('path');
@@ -151,6 +152,8 @@ exports.deletePost = async (req, res, next) => {
         const user = await User.findById(req.userId);
         user.posts.pull(postId);
         await user.save();
+
+        await Like.deleteMany({ postId: postId });
 
         res.status(200).json({ message: 'Deleted post.' });
     }

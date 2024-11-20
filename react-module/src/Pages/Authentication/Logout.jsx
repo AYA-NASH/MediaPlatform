@@ -9,7 +9,6 @@ function Logout({ setAuth, setProfile }) {
     useEffect(() => {
         localStorage.removeItem('auth')
         localStorage.removeItem('profile')
-        console.log("Auth removed")
         setAuth("")
         setProfile({})
         navigate('/')

@@ -36,6 +36,42 @@ function App() {
     }
   }, [auth]);
 
+
+  const checkToken = async () => {
+    if (!auth || !auth.token) return false;
+
+    try {
+      const response = await fetch('http://localhost:8000/auth/check-token', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${auth.token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+      return response.ok && data.valid; // Return true if valid
+    } catch (error) {
+      console.error("Token check failed:", error);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const isValid = await checkToken();
+      if (!isValid) {
+        // Token is invalid, log the user out
+        localStorage.removeItem("auth");
+        localStorage.removeItem("profile");
+        setAuth("");
+        setProfile({});
+      }
+    }, 5000); // Check every 5 seconds (adjust as needed)
+
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, [auth]);
+
   return (
     <div className="App">
       <AppContext.Provider value={{ auth, profile, setProfile }}>

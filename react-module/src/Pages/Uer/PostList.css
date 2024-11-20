@@ -1,0 +1,71 @@
+.post-list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+}
+
+.post-list {
+    display: flex;
+    flex-direction: column;
+    /* Stack items vertically */
+    gap: 15px;
+    /* Space between items */
+    width: 100%;
+    /* Make the list take full width */
+    max-width: 600px;
+    /* Optional: Limit the width for better readability */
+}
+
+.post-item {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    font-size: 16px;
+    line-height: 1.5;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Push arrows to the edges */
+    gap: 20px;
+    width: 100%;
+    /* Align pagination controls with the list width */
+    max-width: 600px;
+    /* Match list's max-width */
+    margin-top: 20px;
+}
+
+.arrow {
+    font-size: 24px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.arrow.disabled {
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.page-info {
+    font-size: 18px;
+    color: #555;
+    text-align: center;
+}
+
+.error {
+    color: red;
+    margin-bottom: 10px;
+}
+
+.empty-message {
+    color: #555;
+    font-size: 16px;
+    text-align: center;
+    margin: 20px 0;
+}

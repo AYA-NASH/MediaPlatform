@@ -13,6 +13,12 @@ module.exports = (req, res, next) => {
     try {
         decodedToken = jwt.verify(token, 'mySecretToken');
     } catch (err) {
+        if (err.name === 'TokenExpiredError') {
+            const error = new Error('Unauthorized Request: Token Expired');
+            error.statusCode = 401;
+            throw error;
+        }
+
         err.statusCode = 500;
         throw err;
     }

@@ -1,6 +1,5 @@
 const express = require('express');
 const { body } = require('express-validator');
-const upload = require('../middleware/multer')
 const router = express.Router();
 
 const authController = require('../controllers/auth');
@@ -35,8 +34,6 @@ router.put('/signup', [
 
 router.post('/login', authController.login);
 
-router.get('/profile', isAuth, authController.getUserProfile)
-
-router.patch('/profile', isAuth, upload.single('profile'), authController.updateUserProfile)
+router.get('/check-token', isAuth, authController.checkToken);
 
 module.exports = router;

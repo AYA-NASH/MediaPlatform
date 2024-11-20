@@ -23,6 +23,7 @@ function ProfilePicture({ picture, updateProfilePic }) {
             setPreviewImg(previewUrl);
             try {
                 const data = await updateProfilePicture(file, auth.token);
+                console.log("DATA: ", data)
                 if (data) {
                     updateProfilePic((prev) => ({
                         ...prev,
@@ -31,7 +32,7 @@ function ProfilePicture({ picture, updateProfilePic }) {
                 }
             } catch (err) {
                 setError("Failed to update profile picture. Please try again.");
-                setPreviewImg(generateImageUrl(picture));
+                setPreviewImg(`${BASE_URL}/${picture}`);
             }
         }
     };

@@ -1,9 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import ProfilePicture from "./ProfilePicture";
-import EditProfileModal from './EditProfileModal'
+import EditProfileModal from './EditProfileModal';
+import PostList from "./PostList";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import './Profile.css';
+import { fetchUserLikedPosts, fetchUserPosts } from "./profile-actions";
 
 function Profile({ profile, setProfile }) {
     const [profileData, setProfileData] = useState(profile);
@@ -80,14 +82,14 @@ function Profile({ profile, setProfile }) {
                         </button>
 
                         {showPosts && (
-                            <div className="post-list">
-                                {profileData.posts.map((p, i) => (
-                                    <div key={i} className="post-item">
-                                        <strong>{p.title}</strong>
-                                        <span> - {formatDate(p.createdAt)}</span>
-                                    </div>
-                                ))}
-                            </div>
+                            <PostList
+                                fetchPosts={fetchUserPosts}
+                                renderPost={(post) => (
+                                    <>
+                                        <strong>{post.title}</strong>
+                                        <span> - {formatDate(post.createdAt)}</span>
+                                    </>
+                                )} />
                         )}
                     </div>
 
@@ -100,23 +102,25 @@ function Profile({ profile, setProfile }) {
                         </button>
 
                         {showActivities && (
-                            <div className="post-list">
-                                {profileData.likedPosts.map((p, i) => (
-                                    <div key={i} className="post-item">
-                                        <strong>{p.postId?.title}</strong>
-                                        <span> - @ {p.user?.name}</span>
-                                        <span> - {formatDate(p?.createdAt)}</span>
-                                    </div>
-                                ))}
-                            </div>
+                            <PostList
+                                fetchPosts={fetchUserLikedPosts}
+                                renderPost={(likedPost) => (
+                                    <>
+                                        <strong>{likedPost.title}</strong>
+                                        <span> - @{likedPost.creator?.name}</span>
+                                        <span> - {formatDate(likedPost.createdAt)}</span>
+                                    </>
+                                )} />
+
                         )}
 
                     </div>
                 </>
             ) : (
                 <p>Loading profile...</p>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 }
 export default Profile;
