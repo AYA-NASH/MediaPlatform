@@ -9,7 +9,6 @@ function Navbar() {
     const [previewImg, setPreviewImg] = useState("/defaultProfile.png");
 
     useEffect(() => {
-        console.log("Profile NAVBAR: ", profile)
         if (profile.profilePicture) {
             setPreviewImg(`${BASE_URL}/${profile.profilePicture}`);
         } else {
@@ -20,8 +19,8 @@ function Navbar() {
     return (
         <div className="Navbar">
             <Link to={"/"}> Home </Link>
-            {auth && <Link to={"create-post"}> Create Post </Link>}
-            {auth ? (
+            {auth.token && <Link to={"create-post"}> Create Post </Link>}
+            {auth.token ? (
                 <div className="navbar-profile">
                     <Link to={"/logout"} className="logout">
                         Logout

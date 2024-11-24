@@ -87,3 +87,8 @@
 .toggle-btn:hover {
     background-color: #1f1d1d;
 }
+
+.delete-btn {
+    background-color: #d9534f;
+    color: white;
+}

@@ -19,11 +19,11 @@ function ProfilePicture({ picture, updateProfilePic }) {
         const file = evt.target.files[0];
 
         if (file) {
-            const previewUrl = URL.createObjectURL(file);
-            setPreviewImg(previewUrl);
+            // const previewUrl = URL.createObjectURL(file);
+
+            // setPreviewImg(previewUrl);
             try {
                 const data = await updateProfilePicture(file, auth.token);
-                console.log("DATA: ", data)
                 if (data) {
                     updateProfilePic((prev) => ({
                         ...prev,

@@ -6,12 +6,14 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import './Profile.css';
 import { fetchUserLikedPosts, fetchUserPosts } from "./profile-actions";
+import DeleteAccountModal from "./DeleteAccountModal";
 
 function Profile({ profile, setProfile }) {
     const [profileData, setProfileData] = useState(profile);
     const [showPosts, setShowPosts] = useState(false);
     const [showActivities, setShowActivities] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -24,12 +26,7 @@ function Profile({ profile, setProfile }) {
 
     useEffect(() => {
         localStorage.setItem('profile', JSON.stringify(profileData));
-        setProfile(prev => {
-            return {
-                ...prev,
-                profileData
-            }
-        });
+        setProfile(profileData);
     }, [profileData, setProfile]);
 
     const openEditModal = () => {
@@ -40,7 +37,9 @@ function Profile({ profile, setProfile }) {
         setIsEditModalOpen(false);
     };
 
-
+    const closeDeleteModal = () => {
+        setIsDeleteModalOpen(false);
+    }
     return (
         <div className="Profile">
             {profileData ? (
@@ -115,6 +114,17 @@ function Profile({ profile, setProfile }) {
                         )}
 
                     </div>
+
+                    <button className="delete-btn" onClick={() => setIsDeleteModalOpen(true)}>
+                        Delete Account
+                    </button>
+
+                    {isDeleteModalOpen && (
+                        <DeleteAccountModal
+                            onClose={closeDeleteModal}
+                            setProfile={setProfile}
+                        />
+                    )}
                 </>
             ) : (
                 <p>Loading profile...</p>

@@ -16,7 +16,6 @@ export const updateProfilePicture = async (file, token) => {
         }
 
         const data = await response.json();
-        console.log("Updated Profile Picture: ", data);
         return data.profile.profilePicture;
     } catch (error) {
         console.error("Error updating profile picture:", error);
@@ -39,7 +38,6 @@ export const updateProfileFields = async (fields, token) => {
             body: formData,
         });
         const data = await response.json();
-
         if (response.status === 401) {
             return { status: response.status, message: data.message }
         }
@@ -70,11 +68,6 @@ export const fetchProfile = async (token) => {
 
         const data = await response.json();
         return data.profile;
-        //      "profile": {
-        //     "name": "Aya Nashaat",
-        //     "email": "yoya@gmail.com",
-        //     "status": "Hello evereybody"
-        // }
     }
     catch (error) {
         console.error("Profile Request Failed");
@@ -96,10 +89,10 @@ export const fetchUserPosts = async (token, pageNum) => {
         }
 
         const data = await response.json();
-        return data.posts; // {items: [{title: , createdAt:}], totalItems: , currentPage:  , totalPages:  }
+        return data.posts;
     }
     catch (error) {
-
+        console.error("Fetching User's data failed")
     }
 }
 
@@ -117,73 +110,30 @@ export const fetchUserLikedPosts = async (token, pageNum) => {
         }
 
         const data = await response.json();
-        return data.likedPosts; // {items: [{title: , creator: , createdAt: }], totalItems: , currentPage:  , totalPages: }
+        return data.likedPosts;
     }
     catch (error) {
-
+        console.error("Fetchin user's activities failed");
     }
 }
 
-/**
- http://localhost:8000/profile/liked-posts?page=2
-{
-    "likedPosts": {
-        "items": [
-            {
-                "title": "new post",
-                "creator": "Aya Nashaat",
-                "createdAt": "2024-11-20T12:32:56.272Z"
+export const deleteAccount = async (token) => {
+    try {
+        const response = await fetch("http://localhost:8000/profile/delete-account", {
+            method: "DELETE",
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
-        ],
-        "totalItems": 1,
-        "currentPage": 1,
-        "totalPages": 1
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to delete the Account");
+        }
+
+        const result = await response.json();
+        return result;
+    } catch (err) {
+        console.error("Failed to delete the Account", err);
+        throw err;
     }
-}
- * **/
-
-/**
- http://localhost:8000/profile/posts?page=2
- {
-    "posts": {
-        "items": [
-            {
-                "_id": "673dd726c84d3f1eefbfd98d",
-                "title": "Hi",
-                "createdAt": "2024-11-20T12:33:42.396Z"
-            }
-        ],
-        "totalItems": 1,
-        "currentPage": 1,
-        "totalPages": 1
-    }
-}
- **/
-
-
-
-/**
-http://localhost:8000/profile/edit
-
-{
-    "messgae": "User's profile updated",
-    "profile": {
-        "name": "Aya Nashaat",
-        "email": "yoya@gmail.com",
-        "status": "Hello evereybody"
-    }
-}
-
-**/
-
-/** 
-http://localhost:8000/profile/information
-{
-    "message": "User Information Fetched",
-    "profile": {
-        "name": "Aya Nashaat",
-        "email": "yoya@gmail.com",
-        "status": "Hello evereybody"
-    }
-}
-**/
+};

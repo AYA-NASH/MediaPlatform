@@ -17,8 +17,6 @@ function Home() {
             setMessage(location.state.message);
             setShowMessage(true);
 
-            navigate(location.pathname, { replace: true, state: null });
-
             setTimeout(() => {
                 setShowMessage(false);
             }, 3000);

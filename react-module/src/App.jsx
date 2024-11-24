@@ -29,11 +29,14 @@ function App() {
   }
 
   useEffect(() => {
-    localStorage.setItem('auth', JSON.stringify(auth));
-
     if (auth) {
+      localStorage.setItem('auth', JSON.stringify(auth));
       getProfile(auth.token);
     }
+    else {
+      setAuth("");
+    }
+
   }, [auth]);
 
 
@@ -61,26 +64,26 @@ function App() {
     const interval = setInterval(async () => {
       const isValid = await checkToken();
       if (!isValid) {
-        // Token is invalid, log the user out
         localStorage.removeItem("auth");
         localStorage.removeItem("profile");
         setAuth("");
         setProfile({});
-      }
-    }, 5000); // Check every 5 seconds (adjust as needed)
 
-    return () => clearInterval(interval); // Cleanup interval on unmount
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, [auth]);
 
   return (
     <div className="App">
-      <AppContext.Provider value={{ auth, profile, setProfile }}>
+      <AppContext.Provider value={{ auth, setAuth, profile, setProfile }}>
         <Router>
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login loginUser={setAuth} />} />
-            <Route path="/logout" element={<Logout setAuth={setAuth} setProfile={setProfile} />} />
+            <Route path="/logout" element={<Logout />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="create-post" element={<CreatePost />} />
             <Route path="/home/post/:postId" element={<PostView />} />

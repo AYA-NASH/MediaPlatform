@@ -8,7 +8,7 @@ const Post = require('../models/post');
 exports.getUserInfo = async (req, res, next) => {
     const userId = req.userId;
     try {
-        const user = await User.findById(userId, 'name email profilePicture status');
+        const user = await User.findById(userId, 'name email profilePicture status createdAt');
         if (!user) {
             const error = new Error('User not found.');
             error.statusCode = 404;
@@ -20,7 +20,8 @@ exports.getUserInfo = async (req, res, next) => {
                 name: user.name,
                 email: user.email,
                 status: user.status,
-                profilePicture: user.profilePicture
+                profilePicture: user.profilePicture,
+                createdAt: user.createdAt
             }
         })
     }
@@ -130,7 +131,7 @@ exports.getUserLikedPosts = async (req, res, next) => {
         res.status(200).json({
             likedPosts: {
                 items: likedPosts.map(p => {
-                    return { title: p.postId.title, creator: p.user.name, createdAt: p.createdAt }
+                    return { _id: p.postId._id, title: p.postId.title, creator: p.user.name, createdAt: p.createdAt }
                 }),
                 totalItems: totalLikedPosts,
                 currentPage: page,
@@ -145,3 +146,29 @@ exports.getUserLikedPosts = async (req, res, next) => {
         next(err);
     }
 };
+
+exports.deleteAccount = async (req, res, next) => {
+    const userId = req.userId;
+    try {
+        await Post.deleteMany({ creator: userId });
+        await Like.deleteMany({ user: userId });
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+            const error = new Error("User not found.");
+            error.statusCode = 404;
+            throw error;
+        }
+        if (user.profilePicture) clearFile(user.profilePicture);
+        await User.findByIdAndDelete(userId);
+
+        res.status(200).json({ message: "Account deleted successfully." });
+    }
+    catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
+}

@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
-import Message from "../../components/messages/Message";
 import './Form.css';
 import { useState } from "react";
 
@@ -40,37 +39,43 @@ function SignUp() {
                 body: JSON.stringify(formData)
             });
 
-            if (!response.ok) {
-                setServerMessage("Something wnt wrong, please try again");
-                throw new Error("SignUp Failed", "Error Messge: ", data.message);
-            }
-
             const data = await response.json();
+
+            if (!response.ok) {
+                if (response.status === 422) {
+                    setServerMessage(data.data.map(err => err.msg).join(" "));
+                } else {
+                    setServerMessage(data.message || "Something went wrong, please try again.");
+                }
+                return;
+            }
 
             navigate('/login', { state: { message: `Great!, now Login with your accout` } });
 
         } catch (err) {
-            console.error("Something went wrong", err);
+            console.error("Something went wrong:", err);
+            setServerMessage("An unexpected error occurred. Please try again.");
         }
     };
 
     return (
         <form className="Form" onSubmit={handleSubmit(SignupSubmit)}>
+            {serverMessage && <p className="form-error">{serverMessage}</p>}
+
             <input placeholder="name" {...register("name")} />
-            {errors.name && <p className="error">{errors.name?.message}</p>}
+            {errors.name && <p className="form-error">{errors.name?.message}</p>}
 
 
             <input placeholder="email" {...register("email")} />
-            {errors.email && <p className="error">{errors.email?.message}</p>}
+            {errors.email && <p className="form-error">{errors.email?.message}</p>}
 
             <input type="password" placeholder="password" {...register("password")} />
-            {errors.password && <p className="error">{errors.password?.message}</p>}
+            {errors.password && <p className="form-error">{errors.password?.message}</p>}
 
             <input type="password" placeholder="confirmedPassword" {...register("confirmedPassword")} />
-            {errors.confirmedPassword && <p className="error">{errors.confirmedPassword?.message}</p>}
+            {errors.confirmedPassword && <p className="form-error">{errors.confirmedPassword?.message}</p>}
 
             <input type="submit" className="submitForm" />
-            {serverMessage && <Message text={serverMessage} styleClass={'error'} />}
         </form>
     )
 }

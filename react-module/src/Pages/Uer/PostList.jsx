@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import './PostList.css'; // Ensure styling matches the new design
+import { useNavigate } from "react-router-dom";
+
+import './PostList.css';
 
 function PostList({ fetchPosts, renderPost, title }) {
     const [posts, setPosts] = useState([]);
@@ -8,6 +10,9 @@ function PostList({ fetchPosts, renderPost, title }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
+    const navigate = useNavigate();
+
+
     const getPosts = async (pageNum = 1) => {
         setLoading(true);
         setError("");
@@ -15,7 +20,6 @@ function PostList({ fetchPosts, renderPost, title }) {
         try {
             const auth = JSON.parse(localStorage.getItem("auth"));
             const data = await fetchPosts(auth.token, pageNum);
-
             setPosts(data.items);
             setCurrentPage(data.currentPage);
             setTotalPages(data.totalPages);
@@ -25,6 +29,7 @@ function PostList({ fetchPosts, renderPost, title }) {
             setLoading(false);
         }
     };
+
 
     useEffect(() => {
         getPosts(currentPage);
@@ -39,8 +44,10 @@ function PostList({ fetchPosts, renderPost, title }) {
             {posts.length === 0 && !loading && <p className="empty-message">No posts to display.</p>}
 
             <div className="post-list">
-                {posts.map((post, idx) => (
-                    <div key={idx} className="post-item">
+                {posts.map((post) => (
+                    <div key={post._id} className="post-item"
+                        onClick={() => navigate(`/home/post/${post._id}`)}
+                        style={{ cursor: "pointer" }}>
                         {renderPost(post)}
                     </div>
                 ))}

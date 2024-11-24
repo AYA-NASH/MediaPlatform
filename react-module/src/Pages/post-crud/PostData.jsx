@@ -42,7 +42,7 @@ function PostData({ postData, setPostData, errors }) {
                 value={postData.title}
                 onChange={handleChange}
             />
-            {errors?.title && <p className="error">{errors.title}</p>}
+            {errors?.title && <p className="form-error">{errors.title}</p>}
 
             <label htmlFor="files">Media:</label>
             <input
@@ -58,7 +58,7 @@ function PostData({ postData, setPostData, errors }) {
                 removedItem={setRemovedIdx}
                 edit={true}
             />
-            {errors?.mediaUrls && <p className="error">{errors.mediaUrls}</p>}
+            {errors?.mediaUrls && <p className="form-error">{errors.mediaUrls}</p>}
             <p className="placeholder">
                 Supported files: .jpg, .png, .jpeg, .mp4
             </p>

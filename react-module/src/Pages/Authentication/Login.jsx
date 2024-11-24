@@ -3,7 +3,6 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Message from "../../components/messages/Message";
 import './Form.css';
 
 
@@ -29,6 +28,7 @@ function Login({ loginUser }) {
     }, [location.state]);
 
     const navigate = useNavigate();
+
     const formSchema = yup.object().shape({
         email: yup.string().required("Youd must add you email address").email("Invalid email format"),
         password: yup.string()
@@ -53,15 +53,10 @@ function Login({ loginUser }) {
 
             const data = await response.json();
 
-            if (response.status === 401) {
+            if (response.status === 401 || response.status === 500) {
                 setServerMessage(data.message || "An error occurred during login.");
                 return;
             }
-            if (response.status === 500) {
-                setServerMessage(data.message || "Something wnt wrong, please try again");
-                return;
-            }
-
             loginUser(data);
             navigate('/', { state: { message: `Welcome ${data.username}` } });
 
@@ -71,9 +66,10 @@ function Login({ loginUser }) {
     };
 
     const LoginSubmit = (data) => {
-        getAuth(data);
+        if (Object.keys(errors).length === 0) {
+            getAuth(data);
+        }
     };
-
 
     return (
         <div className="Login">
@@ -84,19 +80,17 @@ function Login({ loginUser }) {
             )}
 
             <form className="Form" onSubmit={handleSubmit(LoginSubmit)}>
+                {serverMessage && <p className="form-error">{serverMessage}</p>}
                 <p>Don't have an account! <a href="/signup">SignUp</a> </p>
 
                 <input placeholder="email" {...register("email")} />
-                {errors.email && <p className="error">{errors.email?.message}</p>}
+                {errors?.email && <p className="form-error">{errors.email?.message}</p>}
 
                 <input type='password' placeholder="password" {...register("password")} />
-                {errors.password && <p className="error">{errors.password?.message}</p>}
+                {errors?.password && <p className="form-error">{errors.password?.message}</p>}
 
                 <input type="submit" className="submitForm" />
-                {serverMessage && <Message text={serverMessage} styleClass={'error'} />}
             </form>
-
-
         </div>
     )
 }

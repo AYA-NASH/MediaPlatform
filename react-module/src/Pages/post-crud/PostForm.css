@@ -1,4 +1,3 @@
-/* Shared form container styling for Create and Edit Post */
 .CreatePost,
 .EditPost {
     width: 90%;
@@ -11,7 +10,6 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Form input field styling */
 input[type="text"],
 input[type="file"],
 textarea {
@@ -50,6 +48,7 @@ label {
 /* Button styling */
 button {
     padding: 10px 20px;
+    width: 100%;
     background-color: #3f3d3d;
     color: #fff;
     border: none;
@@ -64,16 +63,17 @@ button:hover {
     ;
 }
 
-.error {
+.form-error {
     color: #D8000C;
+    max-width: 100%;
     background-color: #FFBABA;
     border: 1px solid #D8000C;
     padding: 10px;
     border-radius: 4px;
     font-size: 14px;
-    margin-top: 10px;
     text-align: center;
 }
+
 
 .placeholder {
     font-size: 0.8rem;

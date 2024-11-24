@@ -12,6 +12,6 @@ router.get('/posts', isAuth, profileController.getUserPosts);
 
 router.get('/liked-posts', isAuth, profileController.getUserLikedPosts);
 
-
+router.delete('/delete-account', isAuth, profileController.deleteAccount);
 
 module.exports = router;

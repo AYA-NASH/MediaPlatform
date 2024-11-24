@@ -38,14 +38,14 @@ function EditPost() {
                 body: formData,
             });
 
+            const data = await response.json();
+
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Post request failed: ${response.status} ${errorData.message}`);
+                setServerMessage(data.message || "An error occurred during Edit Post.");
+                return;
             }
 
-            const data = await response.json();
             setEditData(data.post);
-
             navigate(`/home/post/${data.post._id}`);
 
         } catch (err) {

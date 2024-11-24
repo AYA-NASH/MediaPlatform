@@ -3,7 +3,7 @@ import PostData from "./PostData";
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../App';
 import { validateTitle, validateMedia } from './post-validations';
-import Message from "../../components/messages/Message";
+
 import './PostForm.css';
 
 function CreatePost() {
@@ -12,6 +12,7 @@ function CreatePost() {
     const [postData, setPostData] = useState({ title: "", content: "", mediaUrls: [] });
     const [errors, setErrors] = useState({ titleErrors: [], contentErrors: [], mediaErrors: [] });
     const [serverMessage, setServerMessage] = useState('');
+
 
     const postRequest = async (postData) => {
         const formData = new FormData();
@@ -34,8 +35,8 @@ function CreatePost() {
             const data = await response.json();
 
             if (!response.ok) {
-                setServerMessage("Something wnt wrong, please try again");
-                throw new Error("SignUp Failed", "Error Messge: ", data.message);
+                setServerMessage(data.message || "An error occurred during Post Creation.");
+                return;
             }
 
             navigate('/');
@@ -46,7 +47,6 @@ function CreatePost() {
 
     const handlePostSubmit = (e) => {
         e.preventDefault();
-        // validations checks:
         const newErrors = {};
         const titleError = validateTitle(postData.title);
         const mediaErrors = validateMedia(postData.mediaUrls);
@@ -56,6 +56,7 @@ function CreatePost() {
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
+            console.log("Errors: ", newErrors);
             return;
         }
 
@@ -64,10 +65,10 @@ function CreatePost() {
 
     return (
         <div className="CreatePost">
+            {serverMessage && <p className="form-error">{serverMessage}</p>}
             <form onSubmit={handlePostSubmit}>
                 <PostData postData={postData} setPostData={setPostData} errors={errors} />
                 <button type="submit">Create Post</button>
-                {serverMessage && <Message text={serverMessage} styleClass={'error'} />}
             </form>
         </div>
     );

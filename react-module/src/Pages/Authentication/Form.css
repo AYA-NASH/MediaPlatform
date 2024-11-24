@@ -5,12 +5,10 @@
     width: 100%;
     max-width: 400px;
     margin: 2rem auto;
-    /* Center the form on the page */
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 10px;
     background-color: #f9f9f9;
-    /* Light background */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -36,12 +34,10 @@ input[type="textarea"] {
     border-color: #007bff;
     background-color: #fff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
-    /* Matches post background color */
 }
 
 .Form .submitForm {
     background-color: #333;
-    /* Matches post background color */
     color: white;
     border: none;
     cursor: pointer;
@@ -52,10 +48,9 @@ input[type="textarea"] {
 
 .Form .submitForm:hover {
     background-color: #292929;
-    /* Slightly darker on hover */
 }
 
-.error {
+.form-error {
     color: #D8000C;
     max-width: 400px;
     background-color: #FFBABA;
@@ -63,9 +58,10 @@ input[type="textarea"] {
     padding: 10px;
     border-radius: 4px;
     font-size: 14px;
-    margin-top: 10px;
+    margin-top: 5px;
     text-align: center;
 }
+
 
 .notification {
     position: fixed;
