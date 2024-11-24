@@ -1,14 +1,13 @@
 import { useNavigate } from 'react-router-dom';
-import { useContext, useState } from 'react';
-import { AppContext } from '../../App';
+import { useState } from 'react';
 import LikePost from './LikePost';
 import './Post.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function Post({ postData }) {
-    const { title, content, creator, createdAt, updatedAt, mediaUrls } = postData;
-
-    const { auth } = useContext(AppContext);
+    const { title, creator, createdAt, updatedAt, mediaUrls } = postData;
+    const [likeUsers, setLikeUsers] = useState([]);
+    const [showUsers, setShowUsers] = useState(false);
 
     const navigate = useNavigate();
 
@@ -40,25 +39,33 @@ function Post({ postData }) {
 
     return (
         <div className="Post">
-            <div className='post-data'>
-                <h1>{title}</h1>
-                <p>by @{creator ? creator.name : "unKnown"} | {timeAgo(updatedAt || createdAt)}</p>
+            <div className='post-content'>
+                <div className='post-data'>
+                    <h1>{title}</h1>
+                    <p>by @{creator ? creator.name : "unKnown"} | {timeAgo(updatedAt || createdAt)}</p>
 
-                {mediaUrls.length > 0 && (
-                    <img src={`http://localhost:8000/${mediaUrls[0]}`} />
-                )}
+                    {mediaUrls.length > 0 && (
+                        <img src={`http://localhost:8000/${mediaUrls[0]}`} />
+                    )}
+                </div>
+
+                <div className="icon-container">
+                    <LikePost postId={postData._id} setShowUsers={setShowUsers} setLikeUsers={setLikeUsers} />
+
+                    <i className="fas fa-expand"
+                        onClick={() => viewPost(postData._id)}></i>
+                    <div className="tooltip" >View Post</div>
+                </div>
             </div>
 
-            <div className="icon-container">
-                <LikePost postId={postData._id} />
-
-                <i className="fas fa-expand"
-                    onClick={() => viewPost(postData._id)}></i>
-                <div className="tooltip" onClick={() => viewPost(postData._id)} >View Post</div>
-
-
-
-            </div>
+            {showUsers &&
+                <div className={`users-list ${showUsers ? 'visible' : ''}`}>
+                    <h4>Users who liked this post:</h4>
+                    {likeUsers.map((user, index) => (
+                        <div key={index} className="userItem">{user}</div>
+                    ))}
+                </div>
+            }
 
         </div>
     )

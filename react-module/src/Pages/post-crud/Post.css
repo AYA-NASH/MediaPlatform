@@ -15,6 +15,7 @@
 
 .Post img {
     max-height: 300px;
+    border-radius: 5px;
 }
 
 .Post:hover {
@@ -39,6 +40,7 @@
     font-size: 0.7em;
 }
 
+/* Interaction Icons Section */
 .icon-container {
     display: flex;
     justify-content: space-between;
@@ -79,6 +81,7 @@
     opacity: 1;
 }
 
+/* Likes Section */
 .LikePost {
     display: inline-flex;
     align-items: center;
@@ -90,4 +93,35 @@
     margin: 0;
     font-size: 0.9em;
     color: #555;
+}
+
+.users-list {
+    flex: 1;
+    display: none;
+    background-color: #fff;
+    border-left: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 0 10px 10px 0;
+    max-height: 150px;
+    transform: none;
+
+}
+
+.users-list.visible {
+    display: block;
+}
+
+
+.users-list h4 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.userItem {
+    padding: 8px;
+    background-color: #f9f9f9;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }

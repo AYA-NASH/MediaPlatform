@@ -10,8 +10,6 @@ function Home() {
     const [showMessage, setShowMessage] = useState(false);
     const [message, setMessage] = useState('');
 
-    const navigate = useNavigate();
-
     useEffect(() => {
         if (location.state && location.state.message) {
             setMessage(location.state.message);
@@ -46,8 +44,6 @@ function Home() {
             console.error('Error:', error);
         }
     }
-
-
 
     return (
         <div className="Home">

@@ -1,7 +1,8 @@
 import { useEffect, useState, useContext } from "react";
 import { AppContext } from "../../App";
+import './LikePost.css';
 
-function LikePost({ postId }) {
+function LikePost({ postId, setLikeUsers, setShowUsers }) {
     const [isLiked, setIsLiked] = useState(false);
     const [likesAmount, setLikesAmount] = useState(0);
     const [users, setUsers] = useState([]);
@@ -27,6 +28,7 @@ function LikePost({ postId }) {
         setLikesAmount(data.likes);
 
         setUsers(data.users);
+        setLikeUsers(data.users);
     }
 
 
@@ -76,25 +78,14 @@ function LikePost({ postId }) {
                 onClick={handleLikeToggle}
                 style={{ color: isLiked ? '#007bff' : '#333', cursor: 'pointer' }}
             ></i>
-            <p>Likes: {likesAmount}</p>
+            <p onClick={() => setShowUsers(prev => !prev)}>Likes: {likesAmount}</p>
 
             {showTip && (
-                <p style={tipSytle} > Log in to interact with post.</p>
+                <p className="tip-style" > Log in to interact with post.</p>
             )}
         </div>
     );
 }
 
-const tipSytle = {
-    display: 'inline-block',
-    backgroundColor: '#f8d7da',
-    color: '#721c24',
-    fontSize: '0.85rem',
-    padding: '5px 10px',
-    borderRadius: '5px',
-    marginLeft: '10px',
-    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-    position: 'relative',
-}
 
 export default LikePost;

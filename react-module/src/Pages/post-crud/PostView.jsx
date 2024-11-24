@@ -12,6 +12,9 @@ function PostView() {
     const [fetchedPost, setFetchedPost] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+    const [likeUsers, setLikeUsers] = useState([]);
+    const [showUsers, setShowUsers] = useState(false);
+
     const { auth } = useContext(AppContext);
 
     const navigate = useNavigate();
@@ -80,8 +83,18 @@ function PostView() {
                         onClose={closeDeleteModal}
                     />}
 
-                <LikePost postId={fetchedPost._id} />
+                <LikePost postId={fetchedPost._id} setShowUsers={setShowUsers} setLikeUsers={setLikeUsers} />
             </div>
+
+            {showUsers &&
+                <div className={`users-list ${showUsers ? 'visible' : ''}`}>
+                    <h4>Users who liked this post:</h4>
+                    {likeUsers.map((user, index) => (
+                        <div key={index} className="userItem">{user}</div>
+                    ))}
+                </div>
+            }
+
         </div>
     );
 }
